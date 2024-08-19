@@ -1,3 +1,44 @@
+.order-search-page{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f0f0;
+}
+
+.order-search-container{
+  width: 100%;
+  max-width: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  overflow-x: auto;
+}
+
+
+
+.order-search-container table{
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.order-search-container table, th, td {
+  border: 1px solid #ddd;
+}
+
+.order-search-container th, td {
+  padding: 8px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.order-search-container th{
+  background-color: #f2f2f2;
+}
+
+
 .product-image {
     width: 50px;
     height: auto;
@@ -6,11 +47,20 @@
     object-fit: cover;
 }
 
-.copy-icon{
-    margin-left: 8px;
-    cursor: pointer;
-    color: #007bff;
-    transition: color 0.2s;
+.expand-icon-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.expand-icon {
+  cursor: pointer;
+  font-size: 24px;
+}
+
+.copy-icon, .expand-icon{
+  cursor: pointer;
+  margin-left: 8px;
 }
 
 .copy-icon:hover{
@@ -83,4 +133,21 @@
   
   .order-table tr:hover {
     background-color: #ddd;
+  }
+
+  .order-details {
+    width: 100%;
+    margin-top: 10px;
+    border-collapse: collapse;
+  }
+  
+  .order-details th,
+  .order-details td {
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  .order-details th {
+    background-color: #e0e0e0;
   }

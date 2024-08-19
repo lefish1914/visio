@@ -34,6 +34,8 @@ const Login = ({ onLogin }) => {
 
   return (
     <div className="login-container">
+      <div className='login-box'>
+      <img src='visio-logo.png' alt='Animated' className='animated-image'/>
       <h2>Login</h2>
       <form onSubmit={handleLogin}>
         <div className="form-group">
@@ -65,6 +67,7 @@ const Login = ({ onLogin }) => {
           )} 
           </button>
       </form>
+      </div>
     </div>
   );
 };
