@@ -38,11 +38,11 @@
 }
 
 .animated-image {
-  position: relative;
+  position: fixed;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1;
+  z-index: 10;
   width: 400px; /* Ajuste o tamanho da imagem conforme necessário */
   animation: float 3s ease-in-out infinite;
 }
