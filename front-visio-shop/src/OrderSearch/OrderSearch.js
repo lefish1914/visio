@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
 import './OrderSearch.css';
 
 const OrderSearch = () => {
@@ -19,6 +22,7 @@ const OrderSearch = () => {
         custo: 'R$ 40.000,00',
         desconto: 'R$ 5.000,00',
         valor: 'R$ 50.000,00',
+        observacao: '',
         valorTotal: 'R$ 45.000,00',
         status: 'Pendente',
         descricao: 'Câmera de alta definição',
@@ -39,6 +43,7 @@ const OrderSearch = () => {
         custo: 'R$ 18,00',
         desconto: 'R$ 2,00',
         valor: 'R$ 20,00',
+        observacao: '',
         valorTotal: 'R$ 18,00',
         status: 'Concluído',
         descricao: 'Câmera de entrada',
@@ -57,6 +62,7 @@ const OrderSearch = () => {
         custo: 'R$ 500,00',
         desconto: 'R$ 60,00',
         valor: 'R$ 560,00',
+        observacao: '',
         valorTotal: 'R$ 500,00',
         status: 'Concluído',
         descricao: 'Câmera profissional',
@@ -68,6 +74,8 @@ const OrderSearch = () => {
   const [selectedStatus, setSelectedStatus] = useState('pendentes');
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [expanded, setExpanded] = useState(false);
+  const [editorContent, setEditorContent] = useState('');
+  const [editingOrderId, setEditingOrderId] = useState(null);
 
   const handleStatusChange = (event) => {
     setSelectedStatus(event.target.value);
@@ -82,8 +90,25 @@ const OrderSearch = () => {
     setExpanded(!expanded);
   };
 
+  const handleEditClick = (orderId, currentContent) => {
+    setEditingOrderId(orderId);
+    setEditorContent(currentContent || '');
+  };
+
+  const handleSaveClick = () => {
+    setFilteredOrders((prevOrders) =>
+      prevOrders.map((order) =>
+        order.id === editingOrderId ? { ...order, observacao: editorContent } : order
+      )
+    );
+    setEditingOrderId(null);
+    setEditorContent('');
+  };
+
+
   return (
     <div className="order-search-page">
+      <img src='visio-logo.png' alt='Animated' className='animated-image'/>
       <div className="order-search-container">
         <h2 className="title">Busca de Pedidos</h2>
         <div>
@@ -120,6 +145,7 @@ const OrderSearch = () => {
                     <th>SKU</th>
                     <th>Quantidade</th>
                     <th>Valor</th>
+                    <th>Observação</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -141,6 +167,16 @@ const OrderSearch = () => {
                       <td>{order.sku}</td>
                       <td>{order.quantidade}</td>
                       <td>{order.valor}</td>
+                      <td>
+                        <button
+                        className='edit-button'
+                        onClick={() =>
+                          handleEditClick(order.id, order.observacao)
+                        }
+                        >
+                          Editar
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -183,6 +219,19 @@ const OrderSearch = () => {
             <p>Nenhum pedido encontrado.</p>
           )}
         </div>
+
+        {editingOrderId && (
+          <div className='editor-container'>
+            <ReactQuill
+            value={editorContent}
+            onChange={setEditorContent}
+            className='editor'
+            />
+            <button className='save-button' onClick={handleSaveClick}>
+              Salvar
+            </button>
+            </div>
+        )}
       </div>
     </div>
   );

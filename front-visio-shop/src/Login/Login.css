@@ -51,7 +51,7 @@ body, html {
 .login-button{
     width: 100%;
     padding: 10px;
-    background-color: #007bff;
+    background-color: #ff0000;
     color: white;
     border: none;
     border-radius: 5px;
@@ -60,7 +60,7 @@ body, html {
 }
 
 .login-button :hover{
-    background-color: #0056b3;
+    background-color: #cc0000;
 
 }
 
