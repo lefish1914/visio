@@ -52,7 +52,7 @@
   cursor: pointer;
   margin-left: 8px;
   font-size: 24px;
-  collor: #ff0000;
+  color: #ff0000;
 }
 
 .copy-icon:hover {
@@ -74,25 +74,32 @@
 }
 
 .label {
+  display: block;
+  text-align: center;
   font-weight: bold;
-  margin-right: 10px;
+  margin-bottom: 10px;
   color: #333;
 }
 
 .select {
+  display: block;
+  margin: 0 auto 10px auto;
   padding: 5px;
   border-radius: 5px;
   border: 1px solid #ccc;
+  text-align: center;
 }
 
 .button {
-  margin-top: 10px;
+  display: block;
+  margin: 10px auto;
   padding: 10px 20px;
   background-color: #ff0000;
-  color: #fff;
+  color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  text-align: center;
 }
 
 .button:hover {
@@ -100,6 +107,7 @@
 }
 
 .results {
+  text-align: center;
   margin-top: 20px;
 }
 

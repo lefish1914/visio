@@ -79,10 +79,13 @@ const OrderSearch = () => {
 
   const handleStatusChange = (event) => {
     setSelectedStatus(event.target.value);
+    setFilteredOrders([]);
+    setExpanded(false); 
+    setEditingOrderId(null); 
   };
 
   const handleSearch = () => {
-    const result = orders[selectedStatus];
+    const result = orders[selectedStatus] || []; 
     setFilteredOrders(result);
   };
 
@@ -105,10 +108,8 @@ const OrderSearch = () => {
     setEditorContent('');
   };
 
-
   return (
     <div className="order-search-page">
-      <img src='visio-logo.png' alt='Animated' className='animated-image'/>
       <div className="order-search-container">
         <h2 className="title">Busca de Pedidos</h2>
         <div>
