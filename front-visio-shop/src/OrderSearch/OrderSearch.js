@@ -3,11 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-
 import './OrderSearch.css';
 
 const OrderSearch = () => {
-  const orders = {
+  const [orders, setOrders] = useState({
     pendentes: [
       {
         id: 1,
@@ -69,23 +68,36 @@ const OrderSearch = () => {
         imagem: 'camera-infravermelho-hdcvi-4mp-vhd-3430-b-g6-dir.png',
       },
     ],
-  };
+  });
 
-  const [selectedStatus, setSelectedStatus] = useState('pendentes');
+  const [searchQuery, setSearchQuery] = useState(''); // Valor da busca
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [expanded, setExpanded] = useState(false);
   const [editorContent, setEditorContent] = useState('');
   const [editingOrderId, setEditingOrderId] = useState(null);
+  const [error, setError] = useState(null);
+  const [searchType, setSearchType] = useState('todosPendentes'); // Tipo de filtro selecionado
 
-  const handleStatusChange = (event) => {
-    setSelectedStatus(event.target.value);
-    setFilteredOrders([]);
-    setExpanded(false); 
-    setEditingOrderId(null); 
+  const handleSearchTypeChange = (event) => {
+    setSearchType(event.target.value);
+    setSearchQuery('');
   };
 
   const handleSearch = () => {
-    const result = orders[selectedStatus] || []; 
+    let result = [];
+    if (searchType === 'todosPendentes') {
+      result = orders.pendentes;
+    } else if (searchType === 'todosConcluidos') {
+      result = orders.concluidos;
+    } else if (searchType === 'sku') {
+      result = [...orders.pendentes, ...orders.concluidos].filter(order =>
+        order.sku.toString().includes(searchQuery)
+      );
+    } else if (searchType === 'produto') {
+      result = [...orders.pendentes, ...orders.concluidos].filter(order =>
+        order.produto.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
     setFilteredOrders(result);
   };
 
@@ -99,8 +111,8 @@ const OrderSearch = () => {
   };
 
   const handleSaveClick = () => {
-    setFilteredOrders((prevOrders) =>
-      prevOrders.map((order) =>
+    setFilteredOrders(prevOrders =>
+      prevOrders.map(order =>
         order.id === editingOrderId ? { ...order, observacao: editorContent } : order
       )
     );
@@ -110,21 +122,40 @@ const OrderSearch = () => {
 
   return (
     <div className="order-search-page">
+      <img src='visio-logo.png' alt='Animated' className='animated-image' />
       <div className="order-search-container">
         <h2 className="title">Busca de Pedidos</h2>
-        <div>
-          <label className="label" htmlFor="order-status">
-            Selecione o Status:
-          </label>
-          <select
-            className="select"
-            id="order-status"
-            value={selectedStatus}
-            onChange={handleStatusChange}
-          >
-            <option value="pendentes">Pedidos Pendentes</option>
-            <option value="concluidos">Pedidos Concluídos</option>
-          </select>
+        <div className="search-controls">
+          <div className="search-filter">
+            <label className="label" htmlFor="search-type">
+              Filtrar:
+            </label>
+            <select
+              className="select"
+              id="search-type"
+              value={searchType}
+              onChange={handleSearchTypeChange}
+            >
+              <option value="todosPendentes">Todos Pendentes</option>
+              <option value="todosConcluidos">Todos Concluídos</option>
+              <option value="sku">Buscar por SKU</option>
+              <option value="produto">Buscar por Nome do Produto</option>
+            </select>
+          </div>
+          {['sku', 'produto'].includes(searchType) && (
+            <div className="search-query">
+              <label className="label" htmlFor="search-query">
+                Pesquisa:
+              </label>
+              <input
+                type="text"
+                id="search-query"
+                className="search-input"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          )}
           <button className="button" onClick={handleSearch}>
             Buscar
           </button>
@@ -150,7 +181,7 @@ const OrderSearch = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredOrders.map((order) => (
+                  {filteredOrders.map(order => (
                     <tr key={order.id}>
                       <td>{order.name}</td>
                       <td>{order.cep}</td>
@@ -170,10 +201,8 @@ const OrderSearch = () => {
                       <td>{order.valor}</td>
                       <td>
                         <button
-                        className='edit-button'
-                        onClick={() =>
-                          handleEditClick(order.id, order.observacao)
-                        }
+                          className='edit-button'
+                          onClick={() => handleEditClick(order.id, order.observacao)}
                         >
                           Editar
                         </button>
@@ -203,7 +232,7 @@ const OrderSearch = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredOrders.map((order) => (
+                    {filteredOrders.map(order => (
                       <tr key={order.id}>
                         <td>{order.descricao}</td>
                         <td>{order.custo}</td>
@@ -222,17 +251,19 @@ const OrderSearch = () => {
         </div>
 
         {editingOrderId && (
-          <div className='editor-container'>
+          <div className="editor-container">
             <ReactQuill
-            value={editorContent}
-            onChange={setEditorContent}
-            className='editor'
+              value={editorContent}
+              onChange={setEditorContent}
+              className='editor'
             />
             <button className='save-button' onClick={handleSaveClick}>
-              Salvar
+              Salvar Observação
             </button>
-            </div>
+          </div>
         )}
+
+        {error && <p className="error-message">{error}</p>}
       </div>
     </div>
   );
